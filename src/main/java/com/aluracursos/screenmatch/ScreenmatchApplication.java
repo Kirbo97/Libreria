@@ -18,7 +18,6 @@ public class ScreenmatchApplication implements CommandLineRunner {
 	@Autowired  // esta anotacion sirve para hacer o permita una inyeccion de dependencia
 	private AutorRepository repositorioAutor;
 	public static void main(String[] args) { SpringApplication.run(ScreenmatchApplication.class, args); }
-
 	@Override
 	public void run(String... args) throws Exception {
 		Principal principal = new Principal(repositorioLibro, repositorioAutor);

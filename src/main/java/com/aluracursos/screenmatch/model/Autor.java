@@ -14,6 +14,7 @@ public class Autor {
     @Id   //indico que la V con el nombre de esta anotacion va a ser un identificador de la tabla
     @GeneratedValue(strategy = GenerationType.IDENTITY) //indico que esta anotacion va a ser auto incrementable
     private Long Id;
+    //@Column(unique = true) // esta anotacion es para que solo registre titulos unicos
     private String nombre;
     private Integer fechaDeNacimiento;
     private Integer fechaDeMuerte;

@@ -12,7 +12,6 @@ public class Libro {
     @Id   //indico que la V con el nombre de esta anotacion va a ser un identificador de la tabla
     @GeneratedValue(strategy = GenerationType.IDENTITY) //indico que esta anotacion va a ser auto incrementable
     private Long Id; //creo la variable que servira como atributo de la tabla
-    @Column(unique = true) // esta anotacion es para que solo registre titulos unicos
     private String titulo;
     private Integer descargas;
     private List<String> idiomas;
@@ -29,7 +28,9 @@ public class Libro {
 
     @Override
     public String toString() {
-        return  "\n************ Libro Encontrado ************" +  '\n' +
+        return  "\n******************************************" +  '\n' +
+                "*            Libro Encontrado            *" +  '\n' +
+                "******************************************" +  '\n' +
                 " Titulo = " + titulo +  '\n' +
                 " Autor = " + autores.getNombre()+  '\n' +
                 " Idioma = " + idiomas +  '\n' +
