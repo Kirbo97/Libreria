@@ -8,6 +8,7 @@ import com.aluracursos.screenmatch.repository.*;
 
 // importo las herramientas para usarlos
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Principal {
     private static final String URL_BASE = "https://gutendex.com/books/";
@@ -29,23 +30,23 @@ public class Principal {
         var opcion = -1;
         while (opcion != 0) {
             var menu1 = """
-                    \n ************************************************
-                     *                   M E N U                    *
-                     ************************************************
-                     *  1 - Buscar libro por titulo.                *
-                     *  2 - Listar libros registrados.              *
-                     *  3 - Listar autores registrados.             *
-                     *  4 - Listar autores de un determinado año.   *
-                     *  5 - Listar libros por idioma.               *
-                     *  0 - Salir                                   *
-                     ************************************************""";
+                    \n******************* M E N U ********************
+                    *  1 - Buscar libro por titulo.                *
+                    *  2 - Listar libros registrados.              *
+                    *  3 - Listar autores registrados.             *
+                    *  4 - Listar autores de un determinado año.   *
+                    *  5 - Listar libros por idioma.               *
+                    *  0 - Salir                                   *
+                    ************************************************""";
             System.out.println("\n" + menu1);
             System.out.print("\nEscoja una opcion: ");
             opcion = teclado.nextInt();
+            teclado.nextLine();
 
             switch (opcion) {
                 case 1:
                     buscarLibroWeb();
+                    //prueba();
                     break;
                 case 2:
                     listarLibroReg();
@@ -68,6 +69,12 @@ public class Principal {
         }
 
     }
+
+
+/*
+    private void prueba() {
+    }
+*/
 
     // Primera Opcion
     private void buscarLibroWeb() {
@@ -139,6 +146,7 @@ public class Principal {
     // Segunda opcion
     public void listarLibroReg(){
         libros = repositorioLibro.findAll();//lista de todos los Libros de la BD
+        //El comparator se usa para tener control preciso sobre el orden de clasificación
         if(libros.size()!=0){
             for (int i = 0; i < libros.size(); i++) {
                 System.out.println("\n************ Libro "+(i+1)+" ************" +  '\n' +
@@ -157,6 +165,7 @@ public class Principal {
     public void listarAutoresReg(){
         autores = repositorioAutor.findAll(); //lista de todos los autores de la BD
         libros = repositorioLibro.findAll();//lista de todos los Libros de la BD
+        //El comparator se usa para tener control preciso sobre el orden de clasificación
         if(autores.size()!=0){
             for (int i = 0; i < autores.size(); i++) {
                 var cont=0;
@@ -179,33 +188,10 @@ public class Principal {
 
     // Cuarta opcion
     public void listarAutoresRango(){
-        autores = repositorioAutor.findAll(); //lista de todos los autores de la BD
-        libros = repositorioLibro.findAll();//lista de todos los Libros de la BD
-        if(autores.size()!=0){
-            System.out.print("\nIngrese un año de nacimiento: ");
-            var n1 = teclado.nextInt();
-            System.out.print("\nIngrese un año de fallecimiento: ");
-            var n2 = teclado.nextInt();
-            var rango=0;
-
-            for (int i = 0; i < autores.size(); i++) { //Busca todos los autores de la BD
-                var cont=0;
-                //Verifica si el rango coincide con el autor
-                if ((autores.get(i).getFechaDeNacimiento() >= n1) && (autores.get(i).getFechaDeMuerte() <= n2)){
-                    rango++;
-                    System.out.println("\n********** Autor "+rango+" **********" +  '\n' +
-                            " Nombre = " + autores.get(i).getNombre() +  '\n' +
-                            " Fecha de nacimiento = " + autores.get(i).getFechaDeNacimiento() +  '\n' +
-                            " Fecha de fallecimiento = " + autores.get(i).getFechaDeMuerte());
-                    for (int x = 0; x < libros.size(); x++) { //Busca todos los libros del autor
-                        if (Objects.equals(libros.get(x).getAutores().getNombre(), autores.get(i).getNombre())){
-                            cont++;
-                            System.out.println(" Libro "+cont+ " = " + libros.get(x).getTitulo());
-                        }
-                    }
-                    System.out.println("*********************************");
-                }
-            }
+        autores = repositorioAutor.findAll();//recojo el contenido del repositorio y lo guardo a una lista
+        //El comparator se usa para tener control preciso sobre el orden de clasificación
+        if(autores.stream().findFirst().isPresent()){
+            autores.stream().forEach(System.out::println);
         } else {
             System.out.println("No hay Autores registrados");
         }
@@ -213,54 +199,16 @@ public class Principal {
 
     // Quinta opcion
     public void listarLibroIdioma(){
-        libros = repositorioLibro.findAll();//lista de todos los Libros de la BD
-        var entrada = 1;
         var menu2 = """
                     \n********* IDIOMAS ***********
-                    *  1) es - Español.          *
-                    *  2) en - Ingles.           *
-                    *  3) fr - Frances.          *
-                    *  4) pt - Portuges.         *
+                    *  es - Español.             *
+                    *  en - Ingles.              *
+                    *  fr - Frances.             *
+                    *  pt - Portuges.            *
                     ******************************""";
-
-        while (entrada < 4 && entrada > 0) {
-            System.out.println("\n" + menu2);
-            System.out.print("\nEscoja una opcion: ");
-            entrada = teclado.nextInt();
-
-            if (entrada > 4){ System.out.println("\nOpción inválida"); }
-            if (entrada == 1){ busquedaIdioma("es"); entrada=5; }
-            if (entrada == 2){ busquedaIdioma("en"); entrada=5; }
-            if (entrada == 1){ busquedaIdioma("fr"); entrada=5; }
-            if (entrada == 2){ busquedaIdioma("pt"); entrada=5; }
-        }
+        System.out.println("\n" + menu2);
+        System.out.print("\nEscoja una opcion: ");
+        var entrada = teclado.nextInt();
 
     }
-
-///////////////////////////////////////////////////////////////////
-    // funcion repetitiva para buscar libros por idioma
-    public void busquedaIdioma(String idio){
-        var libenc=0;
-        if(libros.size()!=0){
-            var cont=0;
-            for (int i = 0; i < libros.size(); i++) {
-                if (libros.get(i).getIdiomas().contains(idio)) {
-                    cont++;
-                    System.out.println("\n************ Libro "+cont+" ************" +  '\n' +
-                            " Titulo = " + libros.get(i).getTitulo() +  '\n' +
-                            " Autor = " + libros.get(i).getAutores().getNombre()+  '\n' +
-                            " Idioma = " + libros.get(i).getIdiomas() +  '\n' +
-                            " Numero de descargas = " + libros.get(i).getDescargas() +  '\n' +
-                            "*******************************************");
-                }else {
-                    libenc++;
-                }
-            }
-
-            if(libenc!=0){ System.out.println("\nNo hay Libros con ese idioma registrado"); }
-        } else {
-            System.out.println("\nNo hay Libros registrados");
-        }
-    }
-
 }

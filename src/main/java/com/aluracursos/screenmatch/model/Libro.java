@@ -28,9 +28,7 @@ public class Libro {
 
     @Override
     public String toString() {
-        return  "\n******************************************" +  '\n' +
-                "*            Libro Encontrado            *" +  '\n' +
-                "******************************************" +  '\n' +
+        return  "\n************ Libro Encontrado ************" +  '\n' +
                 " Titulo = " + titulo +  '\n' +
                 " Autor = " + autores.getNombre()+  '\n' +
                 " Idioma = " + idiomas +  '\n' +

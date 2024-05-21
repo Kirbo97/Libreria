@@ -1,16 +1,19 @@
-## Libreria Alura con Gutendex-api
+## Conversor de monedas con exchangerate-api
 
-Busca libros en la pagina web para rigistrar los datos en la Base de Datos del proyecto.
+Convierte cualquier tipo de moneda soportada por esta api y obtenga la información relevante.
 
 ---
 
 ## Uso
-1) Asegurece de que la clave, usuario, ip y nombre de la BD sean iguales para poder trabajar.
-2) Al ejecutar el programa tendra 6 opciones para escoger.
-3) Dependiendo de la opcion escogida el programa actuara segun corresponda.
-4) Por ultimo, si quiere salir solo debe escoger la ultima opcion del menu.
+1) Selecione la opcion de "convertir" para revisar que monedas estan permitidas
+2) Debe escoger cual sera moneda base que quiere transformar.
+3) Despues debes colocar el valor monetario que desea transformar.
+4) Por ultimo seleccione el valor monetario que se transformara.
 
-## Nota
-Para una mejor visualisacion previa puede consultarlo con la imagen.
+Para un mejor entendimiento en el uso puede consultarlo con la imagen.
 
 ![Ejemplo](./IMG/ejemplo.png)
+
+Tambien puede averiguar a que pais pertenece cada valor monetario con la siguiente imagen.
+
+![Pais](./IMG/pais.png)

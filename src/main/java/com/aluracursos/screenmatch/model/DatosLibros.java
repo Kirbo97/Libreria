@@ -15,4 +15,11 @@ public record DatosLibros(
         @JsonAlias("authors") List<DatosAutor> datosdelautor,
         @JsonAlias("languages") List<String> idiomas,
         @JsonAlias("download_count") Integer numeroDeDescargas
-) { }
+) {
+    public DatosLibros {
+        if (datosdelautor.size() == 0) {
+            datosdelautor.add(new DatosAutor("NULL", 0, 0));
+        }
+    }
+
+}
