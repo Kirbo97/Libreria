@@ -28,8 +28,8 @@ public class Principal {
 
     public void muestraElMenu() {
         var opcion = -1;
-        while (opcion != 0) {
-            var menu1 = """
+
+        var menu1 = """
                     \n******************* M E N U ********************
                     *  1 - Buscar libro por titulo.                *
                     *  2 - Listar libros registrados.              *
@@ -38,10 +38,18 @@ public class Principal {
                     *  5 - Listar libros por idioma.               *
                     *  0 - Salir                                   *
                     ************************************************""";
+
+        while (opcion != 0) {
+
             System.out.println("\n" + menu1);
             System.out.print("\nEscoja una opcion: ");
             opcion = teclado.nextInt();
             teclado.nextLine();
+            /*
+            try{
+            } catch (InputMismatchException e){
+                System.out.println("\nOpción inválida");
+            }*/
 
             switch (opcion) {
                 case 1:
