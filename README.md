@@ -13,7 +13,3 @@ Convierte cualquier tipo de moneda soportada por esta api y obtenga la informaci
 Para un mejor entendimiento en el uso puede consultarlo con la imagen.
 
 ![Ejemplo](./IMG/ejemplo.png)
-
-Tambien puede averiguar a que pais pertenece cada valor monetario con la siguiente imagen.
-
-![Pais](./IMG/pais.png)
