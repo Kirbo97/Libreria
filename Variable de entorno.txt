@@ -4,23 +4,33 @@ DB_USER     postgres
 
 spring.datasource.url=jdbc:postgresql://${DB_HOST}/alura_libreria
 
-
-    private static final String URL_BASE = "https://gutendex.com/books/";
-
+private static final String URL_BASE = "https://gutendex.com/books/";
 
 http://www.omdbapi.com/?i=tt3896198&apikey=834934ed
 
 
 select * from libros
-
 select * from autor
 select * from autor where cod_libro=73400
 DROP TABLE libros, autor
-
-
+select * from autor WHERE (fecha_de_nacimiento >= '1800') and (fecha_de_muerte <= '1889')
 
 Moby Dick
+The Piazza Tales
+
 Frankenstein
+
 Pride and Prejudice
+
 Romeo and Juliet
+
 Little Women
+
+My Life
+
+Tamburlaine the Great
+The Jew of Malta
+The Tragical History of Doctor Faustus: From the Quarto of 1604
+
+The Jargon File, Version 4.2.2, 20 Aug 2000
+The Jargon File, Version 2.9.10, 01 Jul 1992
