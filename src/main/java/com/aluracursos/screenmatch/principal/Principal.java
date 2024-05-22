@@ -174,7 +174,6 @@ public class Principal {
     // Segunda opcion
     public void listarLibroReg(){
         libros = repositorioLibro.findAll();//lista de todos los Libros de la BD
-        //El comparator se usa para tener control preciso sobre el orden de clasificación
         if(libros.size()!=0){
             for (int i = 0; i < libros.size(); i++) {
                 System.out.println("\n************ Libro "+(i+1)+" ************" +  '\n' +
@@ -216,8 +215,6 @@ public class Principal {
 
     // Cuarta opcion
     public void listarAutoresRango(){
-        autores = repositorioAutor.findAll(); //lista de todos los autores de la BD
-        libros = repositorioLibro.findAll();//lista de todos los Libros de la BD
         var rango=0;  var Noaut=0;
 
         System.out.print("\nIngrese el año de nacimiento: ");
@@ -226,28 +223,27 @@ public class Principal {
         System.out.print("\nIngrese el año de nacimiento: ");
         var n2 = teclado.nextInt();
         teclado.nextLine();
-        if(autores.size()!=0){
-            for (int i = 0; i < autores.size(); i++) {
+        List<Autor> filtroAutor= repositorioAutor.findByFechaDeNacimientoGreaterThanEqualAndFechaDeMuerteLessThanEqual(n1, n2);
+
+        if(filtroAutor.size()!=0){
+            for (int i = 0; i < filtroAutor.size(); i++) {
                 var cont=0;
-                if(autores.get(i).getFechaDeNacimiento()>=n1 && autores.get(i).getFechaDeMuerte()<=n2){
-                    rango++;
-                    System.out.println("\n********** Autor "+rango+" **********" +  '\n' +
-                            " Nombre = " + autores.get(i).getNombre() +  '\n' +
-                            " Fecha de nacimiento = " + autores.get(i).getFechaDeNacimiento() +  '\n' +
-                            " Fecha de fallecimiento = " + autores.get(i).getFechaDeMuerte());
-                    for (int x = 0; x < libros.size(); x++) {
-                        if (Objects.equals(libros.get(x).getAutores().getNombre(), autores.get(i).getNombre())){
+                List<Libro> filtroLib = filtroAutor.get(i).getLibros();
+                System.out.println("\n********** Autor "+(i+1)+" **********" +  '\n' +
+                            " Nombre = " + filtroAutor.get(i).getNombre() +  '\n' +
+                            " Fecha de nacimiento = " + filtroAutor.get(i).getFechaDeNacimiento() +  '\n' +
+                            " Fecha de fallecimiento = " + filtroAutor.get(i).getFechaDeMuerte());
+                    for (int x = 0; x < filtroLib.size(); x++) {
+                        if (Objects.equals(filtroLib.get(x).getAutores().getNombre(), filtroAutor.get(i).getNombre())){
                             cont++;
-                            System.out.println(" Libro "+cont+ " = " + libros.get(x).getTitulo());
+                            System.out.println(" Libro "+cont+ " = " + filtroLib.get(x).getTitulo());
                         }
                     }
                     System.out.println("*********************************");
-                } else { Noaut++; }
             }
 
-            if (Noaut==autores.size()){ System.out.println("\nNo hay Autores registrados que coincidan con el rango"); }
         } else {
-            System.out.println("No hay Autores registrados");
+            System.out.println("\nNo hay Autores registrados que coincidan con el rango");
         }
     }
 
@@ -279,8 +275,7 @@ public class Principal {
     /////////////////////////////////////////////  select * from autor WHERE (fecha_de_nacimiento >= '1800') and (fecha_de_muerte <= '1889')
     ////////////////////////////////////////////
     public void buscarPorIdioma(String idioma){
-        var cont=0;
-        var Nolib=0;
+        var cont=0;    var Nolib=0;
         libros = repositorioLibro.findAll();//lista de todos los Libros de la BD
         if(libros.size()!=0){
             for (int i = 0; i < libros.size(); i++) {
