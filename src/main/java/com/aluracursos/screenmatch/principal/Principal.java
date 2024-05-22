@@ -8,7 +8,6 @@ import com.aluracursos.screenmatch.repository.*;
 
 // importo las herramientas para usarlos
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Principal {
     private static final String URL_BASE = "https://gutendex.com/books/";
@@ -28,9 +27,10 @@ public class Principal {
 
     public void muestraElMenu() {
         var opcion = -1;
-
         var menu1 = """
-                    \n******************* M E N U ********************
+                    \n************************************************
+                    *                   M E N U                    *
+                    ************************************************
                     *  1 - Buscar libro por titulo.                *
                     *  2 - Listar libros registrados.              *
                     *  3 - Listar autores registrados.             *
@@ -39,17 +39,36 @@ public class Principal {
                     *  0 - Salir                                   *
                     ************************************************""";
 
-        while (opcion != 0) {
+        while (opcion!=0) {
 
             System.out.println("\n" + menu1);
             System.out.print("\nEscoja una opcion: ");
-            opcion = teclado.nextInt();
-            teclado.nextLine();
-            /*
-            try{
-            } catch (InputMismatchException e){
-                System.out.println("\nOpción inválida");
-            }*/
+            //opcion = teclado.nextInt();
+            //teclado.nextLine();
+            try {
+                opcion = Integer.parseInt(teclado.nextLine());
+            } catch (NumberFormatException e) {
+                opcion = -1;
+            } catch (Exception e) {
+                System.out.println("Error desconocido" + e);
+            }
+
+/*
+            if(!Objects.equals(pru, "1") && !Objects.equals(pru, "2") && !Objects.equals(pru, "3") && !Objects.equals(pru, "4") && !Objects.equals(pru, "5") && !Objects.equals(pru, "0")){
+                System.out.println("\nOpción inválida, porfavor escoja una de las 6 opciones del menu.");
+            }
+
+            if(Objects.equals(pru, "0")){
+                System.out.println("\nCerrando la aplicación...");
+                break;
+            }
+            if(Objects.equals(pru, "1")){ buscarLibroWeb(); }
+            if(Objects.equals(pru, "2")){ listarLibroReg(); }
+            if(Objects.equals(pru, "3")){ listarAutoresReg(); }
+            if(Objects.equals(pru, "4")){ listarAutoresRango(); }
+            if(Objects.equals(pru, "5")){ listarLibroIdioma(); }
+
+*/
 
             switch (opcion) {
                 case 1:
@@ -72,8 +91,9 @@ public class Principal {
                     System.out.println("\nCerrando la aplicación...");
                     break;
                 default:
-                    System.out.println("\nOpción inválida");
+                    System.out.println("\nOpción inválida, porfavor escoja una opcion del menu.\n");
             }
+
         }
 
     }
@@ -147,7 +167,7 @@ public class Principal {
             }
 
         } else {
-            System.out.println("Libro no encontrado");
+            System.out.println("\nLibro no encontrado");
         }
     }
 
@@ -196,10 +216,36 @@ public class Principal {
 
     // Cuarta opcion
     public void listarAutoresRango(){
-        autores = repositorioAutor.findAll();//recojo el contenido del repositorio y lo guardo a una lista
-        //El comparator se usa para tener control preciso sobre el orden de clasificación
-        if(autores.stream().findFirst().isPresent()){
-            autores.stream().forEach(System.out::println);
+        autores = repositorioAutor.findAll(); //lista de todos los autores de la BD
+        libros = repositorioLibro.findAll();//lista de todos los Libros de la BD
+        var rango=0;  var Noaut=0;
+
+        System.out.print("\nIngrese el año de nacimiento: ");
+        var n1 = teclado.nextInt();
+
+        System.out.print("\nIngrese el año de nacimiento: ");
+        var n2 = teclado.nextInt();
+        teclado.nextLine();
+        if(autores.size()!=0){
+            for (int i = 0; i < autores.size(); i++) {
+                var cont=0;
+                if(autores.get(i).getFechaDeNacimiento()>=n1 && autores.get(i).getFechaDeMuerte()<=n2){
+                    rango++;
+                    System.out.println("\n********** Autor "+rango+" **********" +  '\n' +
+                            " Nombre = " + autores.get(i).getNombre() +  '\n' +
+                            " Fecha de nacimiento = " + autores.get(i).getFechaDeNacimiento() +  '\n' +
+                            " Fecha de fallecimiento = " + autores.get(i).getFechaDeMuerte());
+                    for (int x = 0; x < libros.size(); x++) {
+                        if (Objects.equals(libros.get(x).getAutores().getNombre(), autores.get(i).getNombre())){
+                            cont++;
+                            System.out.println(" Libro "+cont+ " = " + libros.get(x).getTitulo());
+                        }
+                    }
+                    System.out.println("*********************************");
+                } else { Noaut++; }
+            }
+
+            if (Noaut==autores.size()){ System.out.println("\nNo hay Autores registrados que coincidan con el rango"); }
         } else {
             System.out.println("No hay Autores registrados");
         }
@@ -208,15 +254,51 @@ public class Principal {
     // Quinta opcion
     public void listarLibroIdioma(){
         var menu2 = """
-                    \n********* IDIOMAS ***********
-                    *  es - Español.             *
-                    *  en - Ingles.              *
-                    *  fr - Frances.             *
-                    *  pt - Portuges.            *
-                    ******************************""";
+                    \n*********************************
+                    *            IDIOMAS            *
+                    *********************************
+                    *  1) es - Español.             *
+                    *  2) en - Ingles.              *
+                    *  3) fr - Frances.             *
+                    *  4) pt - Portuges.            *
+                    *********************************""";
         System.out.println("\n" + menu2);
         System.out.print("\nEscoja una opcion: ");
-        var entrada = teclado.nextInt();
+        var entrada = teclado.nextLine();
+
+        if(Objects.equals(entrada, "1")){ buscarPorIdioma("es"); }
+        if(Objects.equals(entrada, "2")){ buscarPorIdioma("en"); }
+        if(Objects.equals(entrada, "3")){ buscarPorIdioma("fr"); }
+        if(Objects.equals(entrada, "4")){ buscarPorIdioma("pt"); }
+
+        if(!Objects.equals(entrada, "1") && !Objects.equals(entrada, "2") && !Objects.equals(entrada, "3") && !Objects.equals(entrada, "4")){
+            System.out.println("\nOpción inválida");
+        }
+    }
+
+    /////////////////////////////////////////////  select * from autor WHERE (fecha_de_nacimiento >= '1800') and (fecha_de_muerte <= '1889')
+    ////////////////////////////////////////////
+    public void buscarPorIdioma(String idioma){
+        var cont=0;
+        var Nolib=0;
+        libros = repositorioLibro.findAll();//lista de todos los Libros de la BD
+        if(libros.size()!=0){
+            for (int i = 0; i < libros.size(); i++) {
+                if(libros.get(i).getIdiomas().contains(idioma)){
+                    cont++;
+                    System.out.println("\n************ Libro "+cont+" ************" +  '\n' +
+                            " Titulo = " + libros.get(i).getTitulo() +  '\n' +
+                            " Autor = " + libros.get(i).getAutores().getNombre()+  '\n' +
+                            " Idioma = " + libros.get(i).getIdiomas() +  '\n' +
+                            " Numero de descargas = " + libros.get(i).getDescargas() +  '\n' +
+                            "*******************************************");
+                } else { Nolib++; }
+            }
+            if (Nolib==libros.size()){ System.out.println("\nNo hay Libros registrados con ese idioma"); }
+        } else {
+            System.out.println("No hay Libros registrados");
+        }
 
     }
+
 }
