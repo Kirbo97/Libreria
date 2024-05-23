@@ -98,16 +98,13 @@ public class Principal {
 
     }
 
-
 /*
     private void prueba() {
     }
 */
-
     // Primera Opcion
     private void buscarLibroWeb() {
         var bandAutorRep=0;       var bandLibroRep=0;
-        var posaut =0;            var poslib=0;
         //Busqueda de libros por nombre
         System.out.print("\nEscribe el nombre del libro que deseas buscar: ");
         var tituloLibro = teclado.nextLine();
@@ -125,10 +122,11 @@ public class Principal {
             DatosAutor autorBuscado= primerLib.datosdelautor().get(0);
             Autor autorActual=new Autor(autorBuscado);
 
-            autores = repositorioAutor.findAll(); //lista de todos los autores de la BD
-            libros = repositorioLibro.findAll();//lista de todos los Libros de la BD
+            //autores = repositorioAutor.findAll(); //lista de todos los autores de la BD
+            List<Autor> todosAutor = repositorioAutor.findBy();
+            //libros = repositorioLibro.findAll();//lista de todos los Libros de la BD
                 //Si esta vacio la BD
-            if (autores.size()==0){
+            if (todosAutor.size()==0){
                 repositorioAutor.save(autorActual);
                 libroActual.setAutores(autorActual);
                 repositorioLibro.save(libroActual);
@@ -136,25 +134,37 @@ public class Principal {
                 //Si no esta vacio la BD
             } else {
                 // Busca si el titulo de libro se repite
+                libros = repositorioLibro.findByTitulo(libroActual.getTitulo());
+                if (libros.size()!=0){
+                    if (Objects.equals(libros.get(0).getAutores().getNombre(), autorActual.getNombre())){ bandLibroRep=1; }
+                }
+
+/*
                 for (int i = 0; i < libros.size(); i++) {
                     if(Objects.equals(libros.get(i).getTitulo(), libroActual.getTitulo()) ){
                         if (Objects.equals(libros.get(i).getAutores().getNombre(), autorActual.getNombre())){
                             bandLibroRep=1;      poslib=i;       i=libros.size();
                         }
                     }
-                }
+                }*/
+
                 //Busca si solo el autor se repite
+                autores= repositorioAutor.findByNombre(autorActual.getNombre());
+                if (autores.size()!=0){
+                    if(Objects.equals(autores.get(0).getNombre(), autorActual.getNombre())){ bandAutorRep=1; }
+                }
+                /*
                 for (int i = 0; i < autores.size(); i++) {
                     if(Objects.equals(autores.get(i).getNombre(), autorActual.getNombre())){
                         bandAutorRep=1;      posaut=i;       i=autores.size();
                     }
-                }
+                }*/
                 //Si encontro coincidencia con el autor, inyecta los datos del autor viejo con el libro nuevo
                 if (bandAutorRep ==1){
                     if (bandLibroRep==1){
-                        System.out.println(libros.get(poslib));
+                        System.out.println(libros.get(0));
                     } else {
-                        libroActual.setAutores(autores.get(posaut));
+                        libroActual.setAutores(autores.get(0));
                         repositorioLibro.save(libroActual);
                         System.out.println(libroActual);
                     }
@@ -173,7 +183,8 @@ public class Principal {
 
     // Segunda opcion
     public void listarLibroReg(){
-        libros = repositorioLibro.findAll();//lista de todos los Libros de la BD
+        //libros = repositorioLibro.findAll();//lista de todos los Libros de la BD
+        libros = repositorioLibro.findBy();
         if(libros.size()!=0){
             for (int i = 0; i < libros.size(); i++) {
                 System.out.println("\n************ Libro "+(i+1)+" ************" +  '\n' +
@@ -190,9 +201,34 @@ public class Principal {
 
     // Tercera opcion
     public void listarAutoresReg(){
-        autores = repositorioAutor.findAll(); //lista de todos los autores de la BD
-        libros = repositorioLibro.findAll();//lista de todos los Libros de la BD
+        //autores = repositorioAutor.findAll(); //lista de todos los autores de la BD
+        //libros = repositorioLibro.findAll();//lista de todos los Libros de la BD
         //El comparator se usa para tener control preciso sobre el orden de clasificación
+        autores = repositorioAutor.findBy();
+        if(autores.size()!=0){
+            for (int i = 0; i < autores.size(); i++) {
+                var cont=0;
+                List<Libro> todosLibDelAutor = autores.get(i).getLibros();
+                System.out.println("\n********** Autor "+(i+1)+" **********" +  '\n' +
+                        " Nombre = " + autores.get(i).getNombre() +  '\n' +
+                        " Fecha de nacimiento = " + autores.get(i).getFechaDeNacimiento() +  '\n' +
+                        " Fecha de fallecimiento = " + autores.get(i).getFechaDeMuerte());
+                for (int x = 0; x < todosLibDelAutor.size(); x++) {
+                    if (Objects.equals(todosLibDelAutor.get(x).getAutores().getNombre(), autores.get(i).getNombre())){
+                        cont++;
+                        System.out.println(" Libro "+cont+ " = " + todosLibDelAutor.get(x).getTitulo());
+                    }
+                }
+                System.out.println("*********************************");
+            }
+
+        } else {
+            System.out.println("\nNo hay Autores registrados que coincidan con el rango");
+        }
+
+
+
+        /*
         if(autores.size()!=0){
             for (int i = 0; i < autores.size(); i++) {
                 var cont=0;
@@ -211,6 +247,8 @@ public class Principal {
         } else {
             System.out.println("No hay Autores registrados");
         }
+
+         */
     }
 
     // Cuarta opcion

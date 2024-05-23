@@ -11,6 +11,10 @@ public interface AutorRepository extends JpaRepository<Autor,Long> {
 
     List<Autor> findByFechaDeNacimientoGreaterThanEqualAndFechaDeMuerteLessThanEqual(int n1, int n2);
 
+    List<Autor> findByNombre(String nombaut);
+
+    List<Autor> findBy();
+
 
 
 }
