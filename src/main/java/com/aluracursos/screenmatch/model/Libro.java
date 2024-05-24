@@ -14,7 +14,7 @@ public class Libro {
     private Long Id; //creo la variable que servira como atributo de la tabla
     private String titulo;
     private Integer descargas;
-    private List<String> idiomas;
+    private String idiomas;
     @ManyToOne  // esta anotacion convierte esta variable en un atributo con relacion, este atributo recibira la coneccion de la relacion
     private Autor autores;
 
@@ -23,7 +23,7 @@ public class Libro {
     public Libro(DatosLibros datosLibro){
         this.titulo = datosLibro.titulo();
         this.descargas = datosLibro.numeroDeDescargas();
-        this.idiomas = datosLibro.idiomas();
+        this.idiomas = datosLibro.idiomas().get(0);
     }
 
     @Override
@@ -48,6 +48,6 @@ public class Libro {
     public Integer getDescargas() { return descargas;}
     public void setDescargas(Integer descargas) { this.descargas = descargas; }
 
-    public List<String> getIdiomas() { return idiomas; }
-    public void setIdiomas(List<String> idiomas) { this.idiomas = idiomas; }
+    public String getIdiomas() { return idiomas; }
+    public void setIdiomas(String idiomas) { this.idiomas = idiomas; }
 }

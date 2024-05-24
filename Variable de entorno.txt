@@ -11,9 +11,9 @@ http://www.omdbapi.com/?i=tt3896198&apikey=834934ed
 
 select * from libros
 select * from autor
-select * from autor where cod_libro=73400
 DROP TABLE libros, autor
 select * from autor WHERE (fecha_de_nacimiento >= '1800') and (fecha_de_muerte <= '1889')
+select * from libros where idiomas::character varying ilike '%e%'
 
 Moby Dick
 The Piazza Tales
@@ -21,7 +21,7 @@ The Piazza Tales
 Frankenstein
 Mathilda
 
-The Last Man
+The Everlasting Man
 
 Pride and Prejudice
 

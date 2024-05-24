@@ -12,4 +12,7 @@ public interface LibroRepository extends JpaRepository<Libro,Long> {
     List<Libro> findByTitulo(String nomblib);
 
     List<Libro> findBy();
+
+    @Query("SELECT l FROM Libro l WHERE l.idiomas ILIKE %:idioma%")
+    List<Libro> busquedaIdioma(String idioma);
 }
